@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploring the Taste of Toronto Neighborhoods</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <style>
+
+        *{
+            color: #272727;
+        }
+
+        body{
+            background-color: #f5f5f5;
+        }
+        .main {
+            background-color: white;
+            width: 950px;
+            margin: 10px auto 20px;
+            border: 0px solid #c2bebe;
+            padding: 50px;
+            overflow: hidden;
+
+            box-shadow: 0 1px 1px rgba(0,0,0,0.12), 
+              0 2px 2px rgba(0,0,0,0.12), 
+              0 4px 4px rgba(0,0,0,0.12), 
+              0 8px 8px rgba(0,0,0,0.12),
+              0 16px 16px rgba(0,0,0,0.12);
+        }
+
+        .main-img, img {
+            display: block;
+            margin: auto;
+        }
+
+        p, strong, b{
+            font-family: 'Lato', sans-serif;
+        }
+
+        #heading {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 0;
+        }
+
+        h2{
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <h1 id="heading">Exploring The Restaurants of Toronto <br> Neighborhoods</h1>
+        <div style="width: 100%; margin: auto;">
+            <img style="width: 100%;" class="main-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" alt="">
+        </div>
+
+        <br>
+
+        <h2>Introduction</h2>
+
+        <p>
+            Toronto is the one of most populous city in the North America, home of many great business.
+            It is one of the most diverse cities on the planet, as it is home to over 6 million people and over 300
+            languages.
+            As quoted in an article - What Food Tells Us About Culture: <br><br>
+
+            <strong>"Food is not rational Food is culture, habit, craving and identity."
+                Undoubtedly, Food Diversity is an important part of an ethnically diverse metropolis.</strong> <br></br>
+
+            The idea of this project is to categorically segment the neighborhoods of Toronto into major clusters and
+            examine their cuisines. A desirable intention is to examine the neighborhood cluster's food habits and
+            taste. Further examination might reveal if food has any relationship with the diversity of a neighborhood.
+            The purpose of this project is to help to understand the diversity of a neighborhood by leveraging venue
+            data from the Foursquare’s location API and k-means clustering machine learning algorithm. Exploratory Data
+            Analysis will help to discover further about the culture and diversity of the neighborhood. Stakeholders
+            would be the one who are interested to use this quantifiable analysis to understand the distribution of
+            different cultures and cuisines over one of the most diverse cities on the planet - Toronto. And, this
+            project can be used by a new food investor who is willing to open his or her restaurant over there. Or by a
+            government or authority to examine and study their city's culture diversity better.
+        </p>
+
+        <h2>Data acquisition and cleaning</h2>
+        <p>
+            In this project the Scarborough
+            dataset is used, which have been scrapped from Wikipedia on Week 3 of the capstone project course.
+        </p>
+        <p>
+            Link to Data: <a
+                href="https://en.wikipedia.org/wiki/List_of_postal_codes_of_Canada:_M">https://en.wikipedia.org/wiki/List_of_postal_codes_of_Canada:_M</a>
+        </p>
+
+        <p>Geolocation data: <a href="https://cocl.us/Geospatial_data">https://cocl.us/Geospatial_data</a></p>
+
+
+        <h2>Foursquare API Data</h2>
+        <p>
+            Data about different venues in different neighborhoods of that specific borough have been required. In order
+            to gain that information we will use "Foursquare" locational information. Foursquare is a location data
+            provider with information about all manner of venues and events within an area of interest. Such information
+            includes venue names, locations, menus and even photos. As such, the foursquare location platform will be
+            used as the sole data source since all the stated required information can be obtained through the API.
+            After finding the list of neighborhoods, we then connect to the Foursquare API to gather information about
+            venues inside each and every neighborhood. For each neighborhood, we have chosen the radius to be 100 meter.
+            The data retrieved from Foursquare contained information of venues within a specified distance of the
+            longitude and latitude of the postcodes. The information obtained per venue as follows:
+        <ol>
+            <li>Neighborhood</li>
+            <li>Neighborhood Latitude</li>
+            <li>Neighborhood Longitude</li>
+            <li>Venue</li>
+            <li>Name of the venue</li>
+            <li>Venue Latitude</li>
+            <li>Venue Longitude</li>
+            <li>Venue Category</li>
+        </ol>
+        </p><br>
+
+        <h2>Methodology</h2>
+        <p>
+            Methodology Download and Explore Toronto Dataset
+            In order to segment the neighborhoods of Toronto, a dataset is
+            required that contains the 10 boroughs and the 103 neighborhoods.
+            This dataset is scraped from wikipedia website using the mentioned URL. After,
+            this dataset is merged with the respective dataset of the coordinates data for each
+            neighborhood. Once the the data are ready, it is analyzed to understand the structure
+            of the file. The data returned is transformed, into a pandas dataframe, by
+            looping through the data and filling the dataframe rows one at a time using
+            the following depicted loop.
+
+        </p>
+        <img src="img/img-1.png" alt="">
+        <p>
+            As a result, a dataframe is created with Borough, Neighborhood,
+            Latitude and Longitude details of the Toronto’s neighborhood.
+        </p>
+        <img src="img/img-2.png" alt="">
+        <p>
+            Upon analysis, it is found that the dataframe consists of
+            10 boroughs and 103 neighborhoods. Further, ‘geopy’ library
+            is used to get the latitude and longitude values of Toronto,
+            which was returned to be Latitude: 43.6534817, Longitude: -79.3839347. <br>
+            The following depiction is a map generated using python ‘folium’ library to visualize
+            the map of Toronto and its neighborhoods.
+        </p>
+        <img src="img/img-3.png" alt="">
+
+        <h2>Foursquare Location Data</h2>
+        <p>
+            The Foursquare API is used to explore the neighborhoods and segment them.
+            To access the API, ‘CLIENT_ID’, ‘CLIENT_SECRET’ and ‘VERSION’ is defined.
+            There are many endpoints available on Foursquare for various GET requests. But,
+            to explore the cuisines, it is required that all the venues extracted are from ‘Food’
+            category. Foursquare Venue Category Hierarchy is retrieved using the following
+            code block: The returned request is:
+        </p>
+        <img src="img/img-4.png" alt=""> <br><br>
+
+        <strong>The returned request is further analyzed:</strong> <br> <br>
+        <img src="img/img-5.png" alt=""> <br> <br>
+
+        <p>Upon analysis, it is found that there are 10 major or parent categories of venues, under
+            which all the other sub-categories
+            are included. Following depiction shows the ‘Category ID’
+            and ‘Category Name’ retrieved from API:
+        </p>
+        <img src="img/img-6.png" alt=""> <br><br>
+
+        <p>
+            As said earlier, the ‘FOOD’ category in the above depiction is the matter of interest.
+            A function is created
+            to return a dictionary with ‘Category ID’ & ‘Category Name’ of ‘Food’ & it's sub-categories.
+        </p>
+        <img src="img/img-7.png" alt=""> <br> <br>
+
+        <p>
+            To further understand the results of GET Request, the first neighborhood of the ‘Toronto’
+            dataset is explored. The first neighborhood returned is ‘KFC’ with Latitude 43.7532586 and
+            Longitude -79.3296565. Then, a GET request URL is created to search for Venue with ‘Category
+            ID’ = '4d4b7105d754a06374d81259', which is the ‘Category ID’ for ‘Food’, and radius = 500 meters.
+        </p>
+        <img src="img/img-8.png" alt=""> <br><br>
+
+        <p>The returned request is then examined, which is as follows:</p>
+        <img src="img/img-9.png" alt=""> <br><br>
+
+        <p>The request returned the ‘Category Name’ of the venue as 'KFC' which is of 'Food' category. As, the aim is to
+            segment the neighborhoods of Toronto with respect to the ‘Food’ in its vicinity, it is further required to
+            fetch this data from all the 306 neighborhoods' venues.
+            <br><br>
+            To overcome the redundancy of the process followed above, a function ‘getNearbyFood’ is created. This
+            functions loop through all the neighborhoods of Toronto and creates an API request URL with radius = 500,
+            LIMIT = 100. By limit, it is defined that maximum 100 nearby venues should be returned. Further, the GET
+            request is made to Foursquare API and only relevant information for each nearby venue is extracted from it.
+            The data is then appended to a python ‘list’. Lastly the python ‘list’ is unfolded or flattened to append it
+            to dataframe being returned by the function.
+            It is inquisitive to know that Foursquare API returns all the sub-categories, if a top-level category is
+            specified in the GET Request.
+        </p> <br>
+        <img src="img/img-10.png" alt=""> <br><br>
+
+        <h2>Pickle</h2>
+        <p>
+            Pickle is a very important and easy-to-use library. It is used to serialize the information retrieved from
+            GET requests, to make a persistent ‘.pkl’ file. This file can later be deserialized to retrieve an exact
+            python object structure. This is a crucial as it will counter any redundant requests to the Foursquare API,
+            which is chargeable over the threshold limits
+        </p>
+        <img src="img/img-11.png" alt=""><br>
+        <p>The returned ‘dataframe’ is as follows:</p>
+        <img src="img/img-12.png" alt=""> <br><br>
+
+
+        <h2>Exploratory Data analysis</h2>
+        <p>
+            The merged dataframe ‘toronto_venues’ has all the required information.
+            The size of this dataframe is determined, and it is found that there are total 4263 venues.
+        </p>
+        <img src="img/img-13.png" alt=""> <br><br>
+
+        <p>
+            Now, it is important to find out that how many unique categories can be
+            curated from all the returned venues.
+            There are 156 such categories, with most occurring venues as follows:
+        </p>
+        <img src="img/img-14.png" alt=""><br><br>
+
+
+        <h2>Data Cleaning</h2>
+        <p>
+            It is crucial to understand that the point of interest in the project
+            is to understand the cultural diversity of a neighborhood by clustering
+            it categorically, using the venues’ categories. Thus, it is important to
+            remove all the venues from the ‘dataframe’ which have generalized categories.
+            Here, by generalized, it means that these categorized venues are common
+            across different cultures and food habits. Example of categories of this
+            type of venues are Coffee Shop, Cafe, etc. So, firstly all the unique categories
+            are fed into a python ‘list’.
+        </p>
+        <img src="img/img-15.png" alt=""> <br><br>
+
+        <p>
+            Data Cleaning It is crucial to understand that the point of interest in the project
+            is to understand the cultural diversity of a neighborhood by clustering it categorically,
+            using the venues’ categories. Thus, it is important to remove all the venues from
+            the ‘dataframe’ which have generalized categories. Here, by generalized, it means
+            that these categorized venues are common across different cultures and food habits.
+            Example of categories of this type of venues are Coffee Shop, Cafe, etc. So, firstly
+            all the unique categories are fed into a python ‘list’. Then, manually the categories
+            are determined to be ‘general’ (as explained above). This data pre-preparation totally
+            depends upon the ‘Data Analyst’ discretion and can be modified as required. Following
+            are the categories listed as ‘general’:
+        </p>
+        <img src="img/img-16.png" alt=""><br><br>
+
+        <p>
+            A simple subtraction of two python ‘list’ i.e ‘unique_categories’ and
+            ‘general_categories’ gives a ‘list’ of all the categories which are required
+            for further analysis. Following image depicts the result of the above activity:
+        </p>
+        <img src="img/img-17.png" alt=""><br><br>
+
+        <p>
+            A simple subtraction of two python ‘list’ i.e ‘unique_categories’ and ‘general_categories’
+            gives a ‘list’ of all the categories which are required for further analysis.
+            Following image depicts the result of the above activity: The python ‘list’ curated
+            above, is used to remove all the venues with categories not in ‘food_categories’,
+            and the following dataframe is retrieved:
+        </p>
+        <img src="img/img-18.png" alt=""><br><br>
+
+        <p>
+            Again, the number of unique categories is examined, and it is found
+            that there are only 92 of them, as compared to 156 earlier. That means,
+            almost 50% of the data was a noise
+            for the analysis. This essential step, data cleaning, helped to capture the data points of interest.
+        </p>
+
+        <br><br><br>
+
+        <h2>Feature Engineering</h2>
+        <p>
+            Now, each neighborhood is analyzed individually to understand the most
+            common cuisine being served within its 500 meters of vicinity. The above process
+            is taken forth by using ‘one hot encoding’ function of python ‘pandas’ library. One hot
+            encoding converts the categorical variables (which are ‘Venue Category’) into a
+            form that could be provided to ML algorithms to do a better job in prediction.
+        </p>
+        <img src="img/img-19.png" alt=""><br><br>
+
+        <p>Upon converting the categorical variables,
+            as shown above, ‘Neighbourhood’ column is added back which results into the following:
+        </p>
+        <img src="img/img-20.png" alt=""><br><br>
+
+        <p>
+            Further, number of venues of each category in each neighborhood are counted.
+        </p>
+        <img src="img/img-21.png" alt="">
+
+        <br><br><br>
+
+        <h2>Data visualizisation</h2>
+        <p>
+            These top 10 categories are further plotted individually on bar graph using python
+            ‘seaborn’ library. The following code block creates the graph of top 10 neighborhoods for a category.
+        </p>
+        <img src="img/img-22.png" alt="">
+        <img src="img/img-23.png" alt="">
+        <img src="img/img-24.png" alt=""><br><br>
+
+        <p>
+            Next, the rows of the neighborhood are grouped together and
+            the frequency of occurrence of each category is calculated by taking the mean.
+        </p>
+        <img src="img/img-24.png" alt=""><br><br>
+
+        <p>
+            As the limit is set to be 100, there will be many venues being returned by the
+            Foursquare API. But a neighborhood food habit can be defined by the top 5
+            venues in its vicinity. Following ‘for’ loop creates a dataframe to record
+            the above-mentioned data points:
+        </p>
+        <img src="img/img-25.png" alt=""><br><br>
+
+        <p>
+            Further, the above created dataframe
+            is fed with the top 5 most common venues categories in the respective neighborhood.
+        </p>
+        <img src="img/img-26.png" alt=""> <br><br><br>
+
+        <h2>Machine Learning</h2>
+        <p>
+            ‘k-means’ is an unsupervised machine learning algorithm which creates clusters
+            of data points aggregated together because of certain similarities. This algorithm will be used to count
+            neighborhoods for each cluster label for variable cluster size. To implement this algorithm, it is very
+            important to determine the optimal number of clusters (i.e. k). There are 2 most popular methods for the
+            same, namely ‘The Elbow Method’ and ‘The Silhouette Method’.
+            <br><br>
+            <b>The Elbow Method:</b> The Elbow Method calculates the sum of squared distances of samples
+            to their closest cluster center for different values of ‘k’. The optimal number
+            of clusters is the value after which there is no significant decrease in the sum
+            of squared distances. Following is an implementation of this method
+            (with varying number of clusters from 1 to 49):
+        </p>
+        <img src="img/img-27.png" alt=""><br>
+        <p>
+            Sometimes, Elbow method does not give the required result, which happened in this case.
+            As, there is a gradual decrease in the sum of squared distances, optimal number of
+            clusters can not be determined. To counter this, another method can be implemented,
+            as discussed below.
+        </p><br><br>
+
+        <p>
+            <b>The Silhouette Method:</b> As quoted in Wikipedia – “The Silhouette Method measures how similar a point is to
+            its own cluster (cohesion) compared to other clusters (separation).” Following is an implementation of this
+            method. As it requires minimum 2 clusters to define dissimilarity number of clusters (i.e. ‘k’) will vary
+            from 2 to 49:
+        </p>
+        <img src="img/img-28.png" alt=""><br>
+
+        <p>
+            There is a peak at k = 2, k = 4 and k = 8. Two and four number
+             of clusters will cluster the neighborhoods very broadly. 
+             Therefore, number of clusters (i.e. ‘k’) is chosen to be 8.
+        </p><br><br>
+
+        <h2>k-Means</h2>
+        <p>
+            Following code block runs the k-Means algorithm with number of clusters = 8 
+            and prints the counts of neighborhoods assigned to different clusters:
+        </p>
+        <img src="img/img-29.png" alt=""><br>
+        <p>
+            Further the cluster labels curated are added to the dataframe to get the desired results of segmenting 
+            the neighborhood based upon the most common venues in its vicinity:
+        </p>
+        <img src="img/img-30.png" alt=""><br>
+        
+        <p>
+            Now, ‘neighborhoods_venues_sorted’ is merged with ‘toronto_data’ 
+            to add the Borough, Latitude and Longitude for each neighborhood.
+        </p>
+        <img src="img/img-31.png" alt=""><br><br>
+
+        <p>Again, the Toronto City’s neighborhoods are visualized by using the code block as shown, 
+            which utilizes the python ‘folium’ library.
+        </p>
+        <img src="img/img-32.png" alt=""><br><br><br>
+
+        
+        <h2>Cluster 0</h2>
+        <img src="img/img-33.png" alt=""><br>
+        <b>Following are the results of the Cluster – 0 analysis:</b><br>
+        <img src="img/img-34.png" alt=""><br><br>
+
+        <h2>Cluster 1</h2>
+        <img src="img/img-35.png" alt=""><br>
+        <b>Following are the results of the Cluster – 1 analysis:</b><br>
+        <img src="img/img-36.png" alt=""><br><br>
+
+        <h2>Cluster 2</h2>
+        <img src="img/img-37.png" alt=""><br>
+        <b>Following are the results of the Cluster – 2 analysis:</b><br>
+        <img src="img/img-38.png" alt=""><br><br>
+
+        <h2>Cluster 3</h2>
+        <img src="img/img-39.png" alt=""><br>
+        <b>Following are the results of the Cluster – 3 analysis:</b><br>
+        <img src="img/img-40.png" alt=""><br><br>
+
+        <h2>Cluster 4</h2>
+        <img src="img/img-41.png" alt=""><br>
+        <b>Following are the results of the Cluster – 4 analysis:</b><br>
+        <img src="img/img-42.png" alt=""><br><br>
+
+        <h2>Cluster 5</h2>
+        <img src="img/img-43.png" alt=""><br>
+        <b>Following are the results of the Cluster – 5 analysis:</b><br>
+        <img src="img/img-44.png" alt=""><br><br>
+
+        <h2>Cluster 6</h2>
+        <img src="img/img-45.png" alt=""><br>
+        <b>Following are the results of the Cluster – 6 analysis:</b><br>
+        <img src="img/img-46.png" alt=""><br><br>
+
+        <h2>Cluster 7</h2>
+        <img src="img/img-47.png" alt=""><br>
+        <b>Following are the results of the Cluster – 7 analysis:</b><br>
+        <img src="img/img-48.png" alt=""><br><br>
+
+
+        <h2>Conclusion</h2>
+        <p>
+            On application of Clustering Algorithm, k-Means or others, to 
+            a multi-dimensional dataset, a very inquisitive results can be curated 
+            which helps to understand and visualize the data. The neighborhoods of 
+            Toronto were very briefly segmented into eight clusters and upon 
+            analysis it was possible to rename them basis upon the categories of venues 
+            in and around that neighborhood. Along with the Canadian cuisine, Italian and 
+            Chinese are very dominant in Toronto and so is the diversity statistics. 
+            The results of this project can be improved and made more inquisitive by 
+            using a current Toronto’s dataset along with API platforms which are more 
+            interested in Food Venues (like Yelp, etc.) The scope of this project can be 
+            expanded further to understand the dynamics of each neighborhood and suggest a 
+            new vendor a profitable location to open his or her food place. Also, a government 
+            authority can utilize it to examine and study their city's culture diversity better.
+        </p>
+
+    </div>
+
+
+
+</body>
+
+</html>
